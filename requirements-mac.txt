@@ -1,0 +1,5 @@
+Flask
+numpy
+Pillow
+requests
+tensorflow-macos==2.9.0
