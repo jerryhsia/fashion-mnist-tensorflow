@@ -9,4 +9,4 @@ RUN python3 -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/si
     pip3 install Pillow flask requests gunicorn -i https://pypi.tuna.tsinghua.edu.cn/simple && \
     pip3 cache purge
 
-RUN python3 preload.py
+RUN python3 preload.py && python3 train.py
