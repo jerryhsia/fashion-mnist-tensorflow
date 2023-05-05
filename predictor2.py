@@ -6,8 +6,6 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from io import BytesIO
 import base64
-import time
-import os
 
 
 class CustomException(RuntimeError):
@@ -63,12 +61,7 @@ class PredictWrapper(object):
         image_b64 = request_body['image']
         print(image_b64)
         image_bin = base64.b64decode(image_b64)
-        img_path = '/tmp/image-'+str(time.time())+'.jpg'
-
-        with open(img_path, "wb") as jpg_file:
-            jpg_file.write(image_bin)
-
-        img = image.load_img(img_path, target_size=(28, 28), color_mode="grayscale")
+        img = image.load_img(BytesIO(image_bin), target_size=(28, 28), color_mode="grayscale")
 
         # 图像预处理
         x = image.img_to_array(img)
@@ -83,8 +76,8 @@ class PredictWrapper(object):
         prediction = tf.argmax(predictions, axis=1)
         index = prediction.numpy()[0]
         label = self.labels[index]
-        os.remove(img_path)
-        result = {"index": index, "label": label}
+
+        result = {"index": str(index), "label": label}
         return result
 
     def postprocess(self, infer_result, request_context):

@@ -2,3 +2,4 @@
 /__pycache__
 /venv
 /saved_model
+/predictor2.py
