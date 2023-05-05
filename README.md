@@ -50,3 +50,13 @@ python3 test_file_request.py
 # 发送图片文件推理(shell版本)
 sh test_file_request.sh
 ```
+
+# 镜像构建
+
+```
+# 执行构建
+docker build -t jerry9916/fashion-mnist-tensorflow:2.6.0 .
+
+# 将镜像保存为文件
+docker save -o fashion-mnist-tensorflow.tar jerry9916/fashion-mnist-tensorflow:2.6.0
+```
