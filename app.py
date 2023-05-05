@@ -5,7 +5,6 @@ from tensorflow.keras.preprocessing import image
 import base64
 import time
 import os
-from io import BytesIO
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
