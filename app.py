@@ -3,6 +3,8 @@ from flask import Flask, request
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import base64
+import time
+import os
 from io import BytesIO
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
@@ -18,8 +20,9 @@ inference_func = loaded_model.signatures["serving_default"]
 labels = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
           'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
-# 加载图像
-def load_image(request):
+# 定义推理接口
+@app.route('/predict', methods=['POST'])
+def predict():
     if 'image' in request.files:
         # 通过文件上传
         img_file = request.files['image']
@@ -29,14 +32,13 @@ def load_image(request):
         body = request.get_json()
         image_data = base64.b64decode(body['image'])
 
-    img = image.load_img(BytesIO(image_data), target_size=(28, 28), color_mode="grayscale")
-    return img
+    img_path = '/tmp/image-' + str(time.time()) + '.jpg'
 
+    with open(img_path, "wb") as jpg_file:
+        jpg_file.write(image_data)
 
-# 定义推理接口
-@app.route('/predict', methods=['POST'])
-def predict():
-    img = load_image(request)
+    # TODO 待优化
+    img = image.load_img(img_path, target_size=(28, 28), color_mode="grayscale")
 
     # 图像预处理
     x = image.img_to_array(img)
@@ -51,6 +53,8 @@ def predict():
     prediction = tf.argmax(predictions, axis=1)
     index = prediction.numpy()[0]
     label = labels[index]
+
+    os.remove(img_path)
 
     # 返回预测结果
     return json.dumps({'label': label, 'index': str(index)})
