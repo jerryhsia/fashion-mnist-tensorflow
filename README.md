@@ -55,8 +55,8 @@ sh test_file_request.sh
 
 ```
 # 执行构建
-docker build -t jerry9916/fashion-mnist-tensorflow:2.6.0 .
+docker build -t jerry9916/fashion-mnist:tensorflow-2.6.0-cuda11.2 .
 
 # 将镜像保存为文件
-docker save -o fashion-mnist-tensorflow.tar jerry9916/fashion-mnist-tensorflow:2.6.0
+docker save -o fashion-mnist-tensorflow.tar jerry9916/fashion-mnist:tensorflow-2.6.0-cuda11.2
 ```

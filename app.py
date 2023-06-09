@@ -6,6 +6,10 @@ import base64
 import time
 import os
 
+gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 app = Flask(__name__)
